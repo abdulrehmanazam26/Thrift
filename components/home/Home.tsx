@@ -23,12 +23,16 @@ export function Home({ products, collections, preview, newsletter }: {
         <div className={styles.heroShade} />
         <div className={styles.heroTop}><span>INDEPENDENT STYLE. SECOND CHAPTER.</span><span>THE VAULT EDIT / 01</span></div>
         <div className={styles.heroContent}>
-          <p className={styles.edition}><Asterisk className={styles.heroAsterisk} size={25} /> CURATED PRE-LOVED FASHION</p>
-          <h1 id="campaign-title">ONE PIECE.<br />ONE CHANCE<span className={styles.heroRed}>.</span></h1>
+          <p className={styles.edition}><Asterisk className={styles.heroAsterisk} size={25} /> THE THRIFT VAULT / LIMITED EDIT</p>
+          <p className={styles.heroSaleKicker}>50% OFF — EVERY ONE-OFF FIND</p>
+          <h1 id="campaign-title">PRE-LOVED.<br />NEW ENERGY<span className={styles.heroRed}>.</span></h1>
           <div className={styles.heroActions}>
-            <Link className="button butter-button" href="/shop">ENTER THE VAULT <ArrowUpRight size={21} /></Link>
-            <span>Previously loved.<br />Ready for what’s next.</span>
+            <Link className="button butter-button" href="/shop">SHOP THE SALE <ArrowUpRight size={21} /></Link>
+            <span>One piece only.<br />Priced from Rs. 1,000.</span>
           </div>
+        </div>
+        <div className={styles.saleStamp} aria-label="50 percent off sale">
+          <strong>50%</strong><span>OFF</span><small>ONE-OFF<br />FINDS</small>
         </div>
         <div className={styles.heroBottom}><span>WEAR WHAT OTHERS WON’T FIND.</span><Link href="/new-drop">DISCOVER THE EDIT <ArrowRight size={15} /></Link><span>EST. FOR THE INDIVIDUAL</span></div>
       </section>

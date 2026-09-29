@@ -1,4 +1,4 @@
-export type Condition = "Like new" | "Excellent" | "Very good" | "Good";
+export type Condition = "Premium" | "Like new" | "Excellent" | "Very good" | "Good";
 export type ProductImage = { src: string; alt: string; label: string };
 export type Product = {
   id: string;

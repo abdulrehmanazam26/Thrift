@@ -32,7 +32,7 @@
 .previewNote { display: flex; align-items: center; flex-wrap: wrap; gap: 9px; color: var(--muted); font-size: 11px; margin-bottom: 22px; }
 .previewNote > span { font-size: 9px; border: 1px solid var(--line); padding: 3px 7px; font-weight: 750; color: var(--ink); letter-spacing: .055em; }
 .edits { padding-top: 25px; }
-.editGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 23px; }
+.editGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 23px; }
 .editCard { min-width: 0; }
 .editImage { position: relative; height: clamp(270px, 30vw, 435px); background: var(--soft); overflow: hidden; }
 .editImage img { object-fit: cover; transition: transform .5s ease; }
@@ -160,11 +160,13 @@
 /* Restored original dark campaign banner. */
 .hero { min-height: min(720px, calc(100svh - 120px)); height: min(720px, calc(100svh - 120px)); position: relative; display: block; overflow: hidden; color: var(--paper); background: #1d211e; max-width: none; }
 .heroPhoto { object-fit: cover; object-position: center top; animation: imageReveal 1.1s ease-out; }
+.heroPhoto { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; }
 .heroShade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,.6) 0%, rgba(0,0,0,.22) 52%, transparent 100%), linear-gradient(0deg, rgba(0,0,0,.58), transparent 28%); }
 .heroTop, .heroBottom { position: absolute; left: var(--gutter); right: var(--gutter); display: flex; justify-content: space-between; align-items: center; z-index: 1; font-size: 10px; letter-spacing: .12em; font-weight: 700; }
 .heroTop { top: 28px; }
 .heroContent { position: absolute; z-index: 1; top: 25%; left: var(--gutter); animation: textEnter .8s .15s both; }
 .heroContent .edition { color: var(--paper); margin-bottom: 24px; }
+.heroSaleKicker { display: inline-flex; align-items: center; padding: 8px 12px; margin: 0 0 18px; background: var(--red); color: var(--paper); font-size: 11px; font-weight: 800; letter-spacing: .1em; }
 .heroAsterisk { color: var(--red); vertical-align: middle; margin-right: 8px; }
 .hero h1 { color: var(--paper); font-family: var(--font); font-weight: 800; font-size: clamp(64px, 8.65vw, 145px); line-height: .95; letter-spacing: -.065em; margin: 0 0 34px; }
 .heroRed { color: var(--red); }
@@ -172,6 +174,10 @@
 .heroContent .heroActions > span { color: #d6d3c8; font-size: 12px; line-height: 1.5; }
 .heroBottom { bottom: 25px; }
 .heroBottom a { display: flex; align-items: center; gap: 16px; }
+.saleStamp { position: absolute; z-index: 2; right: clamp(24px, 6vw, 105px); top: 50%; width: 148px; height: 148px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; background: var(--red); color: var(--paper); border: 1px dashed var(--paper); box-shadow: 0 0 0 8px rgba(198,47,50,.24); transform: rotate(12deg); }
+.saleStamp strong { font-size: 48px; line-height: .85; letter-spacing: -.08em; }
+.saleStamp span { font-size: 15px; font-weight: 800; letter-spacing: .12em; }
+.saleStamp small { margin-top: 8px; text-align: center; font-size: 8px; line-height: 1.25; letter-spacing: .12em; }
 @keyframes imageReveal { from { opacity: 0; transform: scale(1.04); } to { opacity: 1; transform: scale(1); } }
 @keyframes textEnter { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
 @media (max-width: 700px) {
@@ -183,6 +189,7 @@
   .heroTop span:last-child { font-size: 8px; }
   .heroContent { left: 20px; right: 20px; top: auto; bottom: 100px; }
   .heroContent .edition { font-size: 8px; margin-bottom: 18px; }
+  .heroSaleKicker { font-size: 9px; margin-bottom: 15px; padding: 7px 9px; }
   .hero h1 { font-size: clamp(53px, 13.4vw, 84px); margin-bottom: 26px; }
   .heroContent .heroActions { gap: 18px; }
   .heroContent .heroActions :global(.button) { padding: 15px 18px; min-height: 51px; font-size: 10px; gap: 30px; }
@@ -190,4 +197,8 @@
   .heroBottom { left: 20px; right: 20px; bottom: 24px; font-size: 8px; }
   .heroBottom a { font-size: 8px; gap: 8px; }
   .heroBottom > span:last-child { display: none; }
+  .saleStamp { width: 104px; height: 104px; right: 20px; top: 22%; box-shadow: 0 0 0 5px rgba(198,47,50,.24); }
+  .saleStamp strong { font-size: 34px; }
+  .saleStamp span { font-size: 11px; }
+  .saleStamp small { font-size: 6px; margin-top: 5px; }
 }

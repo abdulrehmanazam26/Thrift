@@ -104,6 +104,7 @@ function mapProduct(p: ShopifyProduct): Product {
     );
   const v = p.variants.nodes[0];
   const conditions: Condition[] = [
+    "Premium",
     "Like new",
     "Excellent",
     "Very good",
@@ -112,7 +113,21 @@ function mapProduct(p: ShopifyProduct): Product {
   const condition = conditions.find(
     (c) => c.toLowerCase() === f.condition?.toLowerCase(),
   );
-  const resolvedCondition = condition || "Good";
+  const inferredConditions: Record<string, Condition> = {
+    "dolce-gabbana-piece": "Premium",
+    "massimo-dutti-blue-piece": "Excellent",
+    "massimo-dutti-rust-piece": "Excellent",
+    "massimo-dutti-yellow-piece": "Very good",
+    "zara-piece": "Excellent",
+    "zara-knit-piece": "Very good",
+    "zara-basic-piece-1": "Good",
+    "zara-basic-piece-2": "Good",
+    "zara-basic-piece-3": "Good",
+    "zara-basic-piece-4": "Good",
+    "comptoir-des-cotonniers-piece": "Good",
+    "t-shirt": "Good",
+  };
+  const resolvedCondition = condition || inferredConditions[p.handle] || "Good";
   const measurements: Record<string, number> = {};
   const map: Record<string, string> = {
     pit_to_pit: "Chest",
