@@ -28,7 +28,7 @@ export function Home({ products, collections, preview, newsletter }: {
           <h1 id="campaign-title">PRE-LOVED.<br />NEW ENERGY<span className={styles.heroRed}>.</span></h1>
           <div className={styles.heroActions}>
             <Link className="button butter-button" href="/shop">SHOP THE SALE <ArrowUpRight size={21} /></Link>
-            <span>One piece only.<br />Priced from Rs. 1,000.</span>
+            <span>One piece only.<br />Once it’s gone, it’s gone.</span>
           </div>
         </div>
         <div className={styles.saleStamp} aria-label="50 percent off sale">

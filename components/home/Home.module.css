@@ -35,6 +35,9 @@
 .editGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 23px; }
 .editCard { min-width: 0; }
 .editImage { position: relative; height: clamp(270px, 30vw, 435px); background: var(--soft); overflow: hidden; }
+.editCard:only-child { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(260px, .8fr); align-items: center; gap: clamp(24px, 5vw, 80px); }
+.editCard:only-child .editImage { height: clamp(340px, 38vw, 560px); }
+.editCard:only-child .editCaption { border-top: 1px solid var(--line); border-bottom: 0; padding-top: 24px; }
 .editImage img { object-fit: cover; transition: transform .5s ease; }
 .editCard:hover img { transform: scale(1.04); }
 .editNumber { position: absolute; top: 17px; left: 17px; background: var(--paper); padding: 6px 10px; font-size: 9px; font-weight: 700; letter-spacing: .06em; }
@@ -129,7 +132,9 @@
   .edits { padding-top: 8px; overflow: hidden; }
   .editGrid { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 18px; scrollbar-width: thin; scrollbar-color: var(--cobalt) var(--line); }
   .editCard { flex: 0 0 82%; scroll-snap-align: start; }
+  .editCard:only-child { flex-basis: 100%; grid-template-columns: 1fr; gap: 0; }
   .editImage { height: 330px; }
+  .editCard:only-child .editImage { height: auto; aspect-ratio: 4/4.5; }
   .editCaption { padding-top: 16px; }
   .editCaption h3 { font-size: 24px; }
   .editCaption p { font-size: 10px; }
