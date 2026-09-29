@@ -1,0 +1,119 @@
+/* Shared identity: the new campaign also carries through the shopping flow. */
+:root {
+  --paper: #fbf6e7;
+  --ink: #082d1f;
+  --muted: #667065;
+  --line: #ddd7c4;
+  --soft: #eee8d8;
+  --cobalt: #0b3a29;
+  --cobalt-dark: #052217;
+  --butter: #f8c7bd;
+  --red: #b72d2f;
+  --acid: var(--red);
+  --display: "Instrument Serif", Georgia, serif;
+  --serif: "Instrument Serif", Georgia, serif;
+}
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible { outline-color: var(--cobalt); }
+.acid { color: var(--red); }
+.text-link:hover { color: var(--cobalt); }
+.button { border-radius: 3px; transition: background .2s, color .2s, transform .2s; }
+.button:not(:disabled):hover { background: var(--cobalt-dark); color: white; }
+.cobalt-button, .dark { background: var(--cobalt); color: var(--paper); }
+.butter-button, .acid-button { background: var(--butter); color: var(--ink); }
+.button svg, .text-link svg { transition: transform .2s; }
+.button:hover svg, .text-link:hover svg { transform: translate(2px, -2px); }
+.announcement { background: var(--cobalt); color: var(--paper); min-height: 34px; letter-spacing: .07em; }
+.announcement > span { display: flex; align-items: center; gap: 12px; font-size: 9px; }
+.announcement > span i { color: var(--red); font-style: normal; }
+.header { height: 88px; border-bottom-color: var(--line); }
+.wordmark { display: inline-flex; align-items: center; color: var(--cobalt); }
+.brand-lockup { display: inline-flex; align-items: center; gap: 8px; direction: ltr; }
+.brand-thrift { font-family: var(--display); font-size: 31px; line-height: .9; letter-spacing: -.045em; }
+.brand-urdu { font-family: "Noto Nastaliq Urdu", "Noto Naskh Arabic", "Segoe UI", serif; color: var(--red); font-size: 28px; font-weight: 700; line-height: 1; letter-spacing: 0; margin-top: 5px; }
+.brand-logo { width: 176px; height: 70px; object-fit: cover; object-position: center center; mix-blend-mode: multiply; }
+.footer-lockup { color: var(--paper); }
+.footer-lockup .brand-thrift { font-size: 36px; }
+.footer-lockup .brand-urdu { font-size: 35px; }
+.desktop-nav { gap: 20px; }
+.desktop-nav a { font-size: 10px; }
+.desktop-nav a:hover { color: var(--cobalt); box-shadow: inset 0 -2px var(--cobalt); }
+.header-tools { gap: 4px; }
+.bag-button { background: var(--cobalt); color: var(--paper); padding: 0 13px; margin-left: 5px; border-radius: 3px; }
+.bag-button:hover { background: var(--cobalt-dark); }
+.tool-count { background: var(--cobalt); color: white; }
+.product-image { background: #e9e9e1; border-radius: 3px; }
+.badge { color: white; background: var(--cobalt); font-weight: 700; border-radius: 2px; padding: 5px 9px; }
+.badge.sold { background: var(--ink); }
+.wish-button { background: #f8f7f1f2; transform: none; height: 37px; width: 37px; right: 10px; top: 10px; }
+.wish-button.saved { color: var(--cobalt); background: white; }
+.wish-button.saved svg { fill: var(--cobalt); }
+.quick-button { background: var(--cobalt); color: white; border-radius: 2px; }
+.quick-button:hover { background: var(--cobalt-dark); }
+.product-name { font-size: 17px; font-weight: 650; margin-top: 9px; }
+.product-name:hover { color: var(--cobalt); }
+.product-meta { font-size: 10px; align-items: start; }
+.product-meta > span:last-child { text-align: right; }
+.product-bottom { padding-bottom: 15px; border-bottom: 1px solid var(--line); }
+.product-bottom > span:first-child { color: var(--cobalt); font-size: 14px; }
+.catalog-intro h1, .collection-page h1, .wishlist-page h1, .about-intro h1 { font-family: var(--display); font-weight: 400; letter-spacing: -.015em; line-height: 1.08; }
+.catalog-intro > .eyebrow, .collection-page > .eyebrow, .wishlist-page > .eyebrow, .about-intro > .eyebrow { color: var(--cobalt); }
+.catalog-tabs .active { color: var(--cobalt); box-shadow: inset 0 -2px var(--cobalt); }
+.catalog-tabs a:hover { color: var(--cobalt); }
+.filter-controls select, .filter-controls input { border-radius: 3px; background: #ffffff55; }
+.filter-chips button { background: #f3d5cd; color: var(--red); border-radius: 2px; }
+.stock-note > span { background: var(--cobalt); }
+.detail-price { color: var(--cobalt); }
+.detail-title h1 { letter-spacing: -.035em; }
+.gallery-main { border-radius: 3px; }
+.gallery-thumbs button.active { border-color: var(--cobalt); }
+.newsletter { background: var(--paper); border-top: 0; padding-top: 65px; padding-bottom: 65px; }
+.newsletter h2 { font-family: var(--display); font-weight: 400; letter-spacing: -.015em; line-height: 1.1; color: var(--cobalt); margin-bottom: 12px; }
+.newsletter .eyebrow { color: var(--muted); }
+.newsletter form { border-bottom-color: var(--cobalt); }
+.newsletter input:focus-visible { outline: 2px solid var(--cobalt); outline-offset: 3px; }
+.newsletter button:not(:disabled) { color: var(--red); }
+.footer { background: var(--cobalt); color: var(--paper); padding-top: 62px; }
+.footer .wordmark { color: var(--paper); }
+.footer .footer-logo { background: var(--paper); }
+.footer-top p, .footer-top .eyebrow { color: #e8e0d1; }
+.footer-top h3 { color: var(--butter); }
+.footer-top a:hover { color: var(--butter); }
+.footer a:focus-visible { outline-color: var(--butter); }
+.footer-wordmark { font-family: var(--display); font-size: clamp(48px, 17.25vw, 285px); font-weight: 400; letter-spacing: -.055em; line-height: 1.14; color: var(--butter); padding-bottom: 14px; }
+.footer-urdu { color: var(--red); font-family: "Noto Nastaliq Urdu", "Noto Naskh Arabic", "Segoe UI", serif; font-size: .62em; letter-spacing: 0; }
+.footer-bottom { border-top-color: #ffffff40; color: #e8e0d1; }
+.mobile-nav a:hover { color: var(--cobalt); }
+.dialog-heading { border-color: var(--line); }
+.dialog-heading h2 { color: var(--cobalt); }
+@media (min-width: 701px) and (max-width: 1250px) {
+  .header { gap: 16px; padding-left: 3%; padding-right: 3%; }
+  .brand-thrift { font-size: 27px; }
+  .brand-urdu { font-size: 24px; }
+  .desktop-nav { gap: 14px; }
+  .desktop-nav a { font-size: 9px; }
+}
+@media (max-width: 700px) {
+  .header { height: 70px; padding: 0 18px; gap: 8px; }
+  .announcement { min-height: 30px; }
+  .announcement > span { font-size: 7px; gap: 7px; letter-spacing: .045em; }
+  .brand-thrift { font-size: 25px; }
+  .brand-urdu { font-size: 22px; }
+  .header-tools { gap: 0; }
+  .bag-button { margin-left: 0; padding: 8px; width: 35px; min-height: 38px; }
+  .header-tools .icon-button { width: 33px; }
+  .badge { padding: 4px 7px; font-size: 9px; top: 10px; }
+  .wish-button { width: 33px; height: 33px; right: 7px; top: 7px; }
+  .wish-button svg { width: 16px; }
+  .product-name, .dropped .product-name, .catalog-grid .product-name { font-size: 14px; min-height: 36px; }
+  .product-meta, .product-meta > span:nth-child(2), .catalog-grid .product-meta { font-size: 9px; }
+  .product-bottom { flex-wrap: wrap; gap: 3px; }
+  .product-bottom > span:first-child { font-size: 13px; }
+  .product-bottom > span:last-child { font-size: 8px; }
+  .quick-button { font-size: 9px; }
+  .newsletter { padding: 46px 20px; gap: 22px; }
+  .newsletter h2 { font-size: 38px; }
+  .footer { padding-top: 45px; }
+  .footer-lockup .brand-thrift { font-size: 32px; }
+  .footer-lockup .brand-urdu { font-size: 31px; }
+  .footer-wordmark { font-size: 16.1vw; letter-spacing: -.025em; padding-bottom: 8px; }
+}
