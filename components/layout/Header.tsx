@@ -23,26 +23,22 @@ const categoryMenus = [
     label: "MEN",
     href: "/shop?gender=Men",
     items: [
-      ["SHOP ALL MEN", "/shop?gender=Men"],
       ["JACKETS & OUTERWEAR", "/shop?gender=Men&category=Jackets"],
       ["TOPS & TEES", "/shop?gender=Men&category=Tops"],
       ["SHIRTS", "/shop?gender=Men&category=Shirts"],
       ["JEANS & TROUSERS", "/shop?gender=Men&category=Trousers"],
       ["HOODIES & SWEATS", "/shop?gender=Men&category=Hoodies"],
-      ["KNITWEAR", "/shop?gender=Men&category=Knitwear"],
     ],
   },
   {
     label: "WOMEN",
     href: "/shop?gender=Women",
     items: [
-      ["SHOP ALL WOMEN", "/shop?gender=Women"],
       ["JACKETS & COATS", "/shop?gender=Women&category=Jackets"],
       ["TOPS & TEES", "/shop?gender=Women&category=Tops"],
       ["SHIRTS & BLOUSES", "/shop?gender=Women&category=Shirts"],
       ["DRESSES & SKIRTS", "/shop?gender=Women&category=Dresses"],
       ["JEANS & TROUSERS", "/shop?gender=Women&category=Trousers"],
-      ["KNITWEAR", "/shop?gender=Women&category=Knitwear"],
     ],
   },
 ] as const;
