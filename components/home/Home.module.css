@@ -45,6 +45,18 @@
 .editCaption h3 { font-size: 25px; font-weight: 650; letter-spacing: -.045em; margin-bottom: 5px; }
 .editCaption p { font-size: 11px; color: var(--muted); margin-bottom: 13px; }
 .editCaption svg { color: var(--red); }
+.campaignFeatureSection { padding-top: 46px; padding-bottom: 46px; }
+.campaignFeature { display: block; position: relative; min-height: clamp(430px, 43vw, 620px); overflow: hidden; isolation: isolate; color: var(--paper); background: var(--cobalt-dark); }
+.campaignFeature img { object-fit: cover; object-position: center; transition: transform .7s cubic-bezier(.2,.65,.2,1); }
+.campaignFeature:hover img { transform: scale(1.025); }
+.featureShade { position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgba(3,20,12,.86) 0%, rgba(3,20,12,.69) 38%, rgba(3,20,12,.13) 70%, rgba(3,20,12,.03) 100%); }
+.featureCopy { position: absolute; z-index: 2; left: clamp(26px, 6.4vw, 96px); top: 50%; max-width: 390px; transform: translateY(-50%); }
+.featureCopy p { margin: 0 0 18px; color: var(--butter); font-size: 10px; font-weight: 800; letter-spacing: .13em; }
+.featureCopy h2 { margin: 0; font-size: clamp(50px, 5.7vw, 92px); font-weight: 650; letter-spacing: -.075em; line-height: .9; }
+.featureCopy h2 em { color: var(--butter); font-family: var(--serif); font-size: 1.08em; font-weight: 400; letter-spacing: -.055em; }
+.featureCopy > span { display: block; max-width: 250px; margin: 25px 0 28px; color: #e2e0d5; font-size: 13px; line-height: 1.55; }
+.featureCopy strong { display: inline-flex; align-items: center; gap: 13px; padding: 14px 17px; background: var(--paper); color: var(--ink); font-size: 10px; font-weight: 800; letter-spacing: .075em; transition: background .2s, color .2s; }
+.campaignFeature:hover .featureCopy strong { background: var(--butter); }
 .manifesto { background: var(--cobalt); color: var(--paper); display: grid; grid-template-columns: 1.05fr 1fr; padding: 80px 8%; gap: 9%; overflow: hidden; }
 .manifestoCopy > :global(.eyebrow) { font-size: 10px; color: var(--butter); }
 .manifesto a:focus-visible { outline-color: var(--butter); }
@@ -138,6 +150,15 @@
   .editCaption { padding-top: 16px; }
   .editCaption h3 { font-size: 24px; }
   .editCaption p { font-size: 10px; }
+  .campaignFeatureSection { padding-top: 33px; padding-bottom: 33px; }
+  .campaignFeature { min-height: 510px; }
+  .campaignFeature img { object-position: 66% center; }
+  .featureShade { background: linear-gradient(0deg, rgba(3,20,12,.78) 0%, rgba(3,20,12,.27) 67%, rgba(3,20,12,.05) 100%); }
+  .featureCopy { top: auto; right: 24px; bottom: 34px; left: 24px; max-width: 290px; transform: none; }
+  .featureCopy p { margin-bottom: 14px; font-size: 8px; }
+  .featureCopy h2 { font-size: clamp(48px, 13vw, 68px); }
+  .featureCopy > span { margin: 17px 0 20px; font-size: 11px; }
+  .featureCopy strong { padding: 13px 15px; font-size: 9px; }
   .manifesto { grid-template-columns: 1fr; padding: 48px 25px 60px; gap: 45px; }
   .manifestoCopy > :global(.eyebrow) { font-size: 8px; }
   .manifestoCopy h2 { font-size: clamp(43px, 12vw, 72px); margin-top: 25px; }

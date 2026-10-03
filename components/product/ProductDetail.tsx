@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Heart,
   ArrowUpRight,
@@ -20,6 +21,7 @@ import { money } from "@/lib/format";
 import { settings } from "@/lib/settings";
 import { track } from "@/lib/analytics";
 export function ProductDetail({ product: initial }: { product: Product }) {
+  const router = useRouter();
   const { products, add, wishlist, toggleWish, notify } = useStore();
   const p = products.find((x) => x.id === initial.id) || {
     ...initial,
@@ -53,17 +55,8 @@ export function ProductDetail({ product: initial }: { product: Product }) {
     setBusy(true);
     setError("");
     try {
-      const response = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ lines: [{ productId: p.id, quantity: 1 }] }),
-      });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error);
-      const url = new URL(data.checkoutUrl);
-      if (url.protocol !== "https:") throw new Error("Checkout unavailable.");
       track("checkout", { productId: p.id });
-      window.location.assign(url.toString());
+      router.push(`/checkout?buy=${encodeURIComponent(p.id)}`);
     } catch (e) {
       setError((e as Error).message);
     } finally {

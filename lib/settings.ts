@@ -4,16 +4,15 @@ export const settings = {
   whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "",
   email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "",
   instagram: process.env.NEXT_PUBLIC_INSTAGRAM_URL || "",
-  customerAccountUrl: process.env.NEXT_PUBLIC_CUSTOMER_ACCOUNT_URL || "",
-  // Publish owner-approved policy copy here before opening orders.
+  // Owner must approve full terms/returns/privacy text before opening checkout.
   policies: {
     shipping:
-      "Delivery destinations, rates, and dispatch times will be published here before orders open. No shipping charge is collected in this preview.",
+      "Cash on delivery is available within Karachi only. Delivery is Rs 250 per order across Karachi. We will contact you to confirm the order and delivery details.",
     returns:
-      "Our returns policy is being finalized. Eligibility, time limits, and the process for condition or fit concerns will be published before orders open.",
+      "Our detailed returns policy is awaiting owner approval. Please ask about any piece, its measurements, or condition before ordering; contact us promptly if an item differs from its listing.",
     privacy:
-      "This preview stores your saved pieces and bag on this device. Newsletter sign-up is currently unavailable. No payment information is collected. A complete privacy policy will be published before launch.",
+      "Your bag and saved pieces stay on this device. When you place an order, we collect your name, phone, address, optional email and order details to arrange delivery and support. We do not collect card details. A complete privacy policy is awaiting owner approval.",
     terms:
-      "This is a storefront preview. Products, prices, measurements, and photographs in the preview catalog are illustrative and are not offers for sale. Store terms will be published before launch.",
+      "Orders are subject to availability and confirmation by the store. Prices are in PKR. Karachi cash-on-delivery shipping is Rs 250 per order. Full store terms are awaiting owner approval.",
   },
 };

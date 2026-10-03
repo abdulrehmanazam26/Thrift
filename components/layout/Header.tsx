@@ -8,6 +8,7 @@ import {
   UserRound,
   ArrowUpRight,
   ArrowRight,
+  ChevronDown,
 } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -17,15 +18,40 @@ import { Modal } from "@/components/ui/Modal";
 import { filterProducts } from "@/lib/commerce/search";
 import { ProductCard } from "@/components/product/ProductCard";
 import { track } from "@/lib/analytics";
+const categoryMenus = [
+  {
+    label: "MEN",
+    href: "/shop?gender=Men",
+    items: [
+      ["SHOP ALL MEN", "/shop?gender=Men"],
+      ["JACKETS & OUTERWEAR", "/shop?gender=Men&category=Jackets"],
+      ["TOPS & TEES", "/shop?gender=Men&category=Tops"],
+      ["SHIRTS", "/shop?gender=Men&category=Shirts"],
+      ["JEANS & TROUSERS", "/shop?gender=Men&category=Trousers"],
+      ["HOODIES & SWEATS", "/shop?gender=Men&category=Hoodies"],
+      ["KNITWEAR", "/shop?gender=Men&category=Knitwear"],
+    ],
+  },
+  {
+    label: "WOMEN",
+    href: "/shop?gender=Women",
+    items: [
+      ["SHOP ALL WOMEN", "/shop?gender=Women"],
+      ["JACKETS & COATS", "/shop?gender=Women&category=Jackets"],
+      ["TOPS & TEES", "/shop?gender=Women&category=Tops"],
+      ["SHIRTS & BLOUSES", "/shop?gender=Women&category=Shirts"],
+      ["DRESSES & SKIRTS", "/shop?gender=Women&category=Dresses"],
+      ["JEANS & TROUSERS", "/shop?gender=Women&category=Trousers"],
+      ["KNITWEAR", "/shop?gender=Women&category=Knitwear"],
+    ],
+  },
+] as const;
+
 const links = [
-  ["SHOP", "/shop"],
-  ["NEW DROP", "/new-drop"],
-  ["MEN", "/shop?gender=Men"],
-  ["WOMEN", "/shop?gender=Women"],
+  ["HOME", "/"],
   ["VINTAGE", "/shop?style=Vintage"],
-  ["STREETWEAR", "/shop?style=Streetwear"],
   ["ABOUT", "/about"],
-];
+] as const;
 export function Header() {
   const { lines, wishlist, setCartOpen, products, mode } = useStore();
   const [menu, setMenu] = useState(false),
@@ -37,10 +63,10 @@ export function Header() {
     <>
       <div className="announcement">
         <span>GOOD CLOTHES. SECOND CHANCES. <i aria-hidden="true">✦</i> CURATED PRE-LOVED.</span>
-        <Link href="/new-drop">
+        <Link href="/shop">
           {mode === "local"
             ? "EXPLORE THE PREVIEW"
-            : "DISCOVER THE LATEST DROP"}{" "}
+            : "EXPLORE THE LATEST FINDS"}{" "}
           <ArrowUpRight size={12} />
         </Link>
       </div>
@@ -52,11 +78,17 @@ export function Header() {
           </span>
         </Link>
         <nav className="desktop-nav" aria-label="Main navigation">
-          {links.map(([label, url]) => (
-            <Link href={url} key={label}>
-              {label}
-            </Link>
+          <Link href="/">HOME</Link>
+          {categoryMenus.map((menu) => (
+            <details className="nav-dropdown" key={menu.label}>
+              <summary>{menu.label} <ChevronDown size={13} aria-hidden="true" /></summary>
+              <div className="nav-dropdown-panel">
+                <Link className="nav-dropdown-title" href={menu.href}>{menu.label}&apos;S EDIT <ArrowUpRight size={14} /></Link>
+                {menu.items.map(([label, url]) => <Link href={url} key={label}>{label}</Link>)}
+              </div>
+            </details>
           ))}
+          {links.slice(1).map(([label, url]) => <Link href={url} key={label}>{label}</Link>)}
         </nav>
         <div className="header-tools">
           <button
@@ -108,7 +140,13 @@ export function Header() {
       >
         <nav className="mobile-nav" aria-label="Mobile navigation">
           {[
-            ...links,
+            ["HOME", "/"],
+            ...categoryMenus.flatMap((menu) => [
+              [menu.label, menu.href],
+              ...menu.items.map(([label, url]) => [`↳ ${label}`, url]),
+            ]),
+            ["VINTAGE", "/shop?style=Vintage"],
+            ["ABOUT", "/about"],
             ["THE ARCHIVE", "/archive"],
             ["SAVED PIECES", "/wishlist"],
             ["ACCOUNT", "/account"],

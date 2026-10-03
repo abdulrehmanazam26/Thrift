@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ArrowRight, ShoppingBag, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useStore } from "./StoreProvider";
@@ -8,12 +9,12 @@ import { Modal } from "@/components/ui/Modal";
 import { money } from "@/lib/format";
 import { track } from "@/lib/analytics";
 export function CartDrawer() {
+  const router = useRouter();
   const {
     products,
     lines,
     remove,
     setQuantity,
-    mode,
     cartOpen,
     setCartOpen,
     refresh,
@@ -39,18 +40,9 @@ export function CartDrawer() {
     setError("");
     try {
       await refresh();
-      const response = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ lines }),
-      });
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.error);
-      const url = new URL(result.checkoutUrl);
-      if (url.protocol !== "https:")
-        throw new Error("Invalid checkout address.");
       track("checkout", { itemCount: lines.length });
-      window.location.assign(url.toString());
+      setCartOpen(false);
+      router.push("/checkout");
     } catch (e) {
       setError((e as Error).message);
     } finally {
@@ -142,15 +134,7 @@ export function CartDrawer() {
               <span>SUBTOTAL</span>
               <strong>{money(total, items[0]?.product?.currency)}</strong>
             </div>
-            <p className="small muted">
-              Shipping is calculated at checkout. Pieces in your bag are not
-              reserved.
-            </p>
-            {mode === "local" && (
-              <p className="preview-note">
-                Store preview — these pieces aren’t for sale yet.
-              </p>
-            )}
+            <p className="small muted">Karachi delivery Rs 250 · Cash on delivery. Pieces in your bag are not reserved.</p>
             <button
               className="button dark"
               onClick={checkout}

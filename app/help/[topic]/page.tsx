@@ -55,7 +55,7 @@ const pages: Record<
       },
       {
         heading: "Always look at the individual piece",
-        text: "A grade is a summary. The product’s photographs, measurements, and condition notes tell the fuller story. Preview items currently use sample information; actual details will be provided with live inventory.",
+        text: "A grade is a summary. The product’s photographs, measurements, and condition notes tell the fuller story. Ask us for missing details before ordering.",
       },
     ],
   },
@@ -66,7 +66,7 @@ const pages: Record<
       { heading: "Shipping policy", text: settings.policies.shipping },
       {
         heading: "At checkout",
-        text: "When ordering opens, eligible destinations and delivery rates will be shown by the connected checkout. Only the payment methods actually enabled by the store will appear.",
+        text: "Enter a Karachi address and pay cash on delivery. The Rs 250 delivery fee and full order total are shown before you place the order.",
       },
     ],
   },
@@ -81,33 +81,33 @@ const pages: Record<
       },
       {
         heading: "Condition and fit concerns",
-        text: "The final policy will explain how to report an item that differs from its listing and whether fit-related returns are accepted. No final eligibility rules are implied by this preview.",
+        text: "Please contact us promptly if your delivered item differs from its listing. The detailed return eligibility and timeframe are awaiting owner approval.",
       },
     ],
   },
   privacy: {
     title: "YOUR PRIVACY.",
-    intro: "Straightforward information about this preview.",
+    intro: "How your information is used in this store.",
     sections: [
       { heading: "Device storage", text: settings.policies.privacy },
       {
         heading: "Clearing saved information",
-        text: "You can remove pieces from your bag and wishlist, or clear this site’s browser storage to remove both. No customer account is created by using the preview.",
+        text: "You can remove pieces from your bag and wishlist, or clear this site’s browser storage to remove both. No customer account is created.",
       },
       {
-        heading: "External checkout and support",
-        text: "If external checkout, WhatsApp, or social links are enabled, those services apply their own privacy practices. We will publish our complete data handling details before opening orders.",
+        heading: "Orders and support",
+        text: "Checkout is handled on this website. Order details are stored in our private store database. WhatsApp or social links, if used, have their own privacy practices.",
       },
     ],
   },
   terms: {
     title: "THE STORE TERMS.",
-    intro: "This storefront is currently a preview.",
+    intro: "Important information before ordering.",
     sections: [
       { heading: "Preview terms", text: settings.policies.terms },
       {
         heading: "Photography",
-        text: "The campaign image is an AI-generated editorial concept. Catalog imagery is licensed stock photography used to demonstrate the store design. It does not represent inventory, authentication, or endorsement.",
+        text: "Campaign imagery is editorial. Check each product listing for its own photos and condition information; a label or photograph does not establish authentication.",
       },
     ],
   },
@@ -125,11 +125,11 @@ const pages: Record<
       },
       {
         heading: "Does adding an item to my bag reserve it?",
-        text: "No. Your bag records your selection but does not reserve inventory. When live ordering opens, availability will be checked again at checkout.",
+        text: "No. Your bag records your selection but does not reserve inventory. Availability is checked when you place the order.",
       },
       {
         heading: "Can I place an order now?",
-        text: "Not in the preview. The sample catalog lets you explore the shopping experience, but payment and ordering are not open yet.",
+        text: "Karachi COD ordering is available when the store owner opens checkout. If checkout is paused, you can still browse the catalog.",
       },
       {
         heading: "Can I rely on the size label?",

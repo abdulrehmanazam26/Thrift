@@ -1,5 +1,7 @@
 # THRIFT VAULT
 
+> Current implementation: custom Postgres catalog, Karachi COD checkout (Rs 250), and private `/admin` panel. Shopify is no longer used by the running storefront. See [database/README.md](database/README.md) for activation and safety checks. The older Shopify notes below are historical and do not describe the current checkout.
+
 A standalone Next.js / TypeScript storefront for curated pre-loved fashion. Warm-white, near-black, acid-green art direction; original campaign imagery; responsive catalog, collections, product pages, saved pieces and bag.
 
 ## Run locally

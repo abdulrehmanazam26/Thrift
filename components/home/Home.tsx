@@ -1,41 +1,23 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, ArrowRight, Asterisk, Eye, Ruler, RotateCcw } from "lucide-react";
+import { ArrowUpRight, Asterisk, Eye, Ruler, RotateCcw } from "lucide-react";
 import type { Product, Collection } from "@/lib/commerce/types";
 import { ProductCard } from "@/components/product/ProductCard";
 import { Newsletter } from "./Newsletter";
+import { HeroSlider } from "./HeroSlider";
 import styles from "./Home.module.css";
 
-export function Home({ products, collections, preview, newsletter }: {
+export function Home({ products, preview, newsletter }: {
   products: Product[];
   collections: Collection[];
   preview: boolean;
   newsletter: boolean;
 }) {
   const available = products.filter((p) => p.stock > 0);
-  const edits = collections.filter((c) => !c.isDrop &&
-    c.productIds.some((id) => available.some((p) => p.id === id))).slice(0, 3);
 
   return (
     <div className={styles.home}>
-      <section className={styles.hero} aria-labelledby="campaign-title">
-        <Image className={styles.heroPhoto} src="/images/campaign.webp" alt="Two models in relaxed workwear and worn denim in a dark concrete studio" fill priority sizes="100vw" />
-        <div className={styles.heroShade} />
-        <div className={styles.heroTop}><span>INDEPENDENT STYLE. SECOND CHAPTER.</span><span>THE VAULT EDIT / 01</span></div>
-        <div className={styles.heroContent}>
-          <p className={styles.edition}><Asterisk className={styles.heroAsterisk} size={25} /> THE THRIFT VAULT / LIMITED EDIT</p>
-          <p className={styles.heroSaleKicker}>50% OFF — EVERY ONE-OFF FIND</p>
-          <h1 id="campaign-title">PRE-LOVED.<br />NEW ENERGY<span className={styles.heroRed}>.</span></h1>
-          <div className={styles.heroActions}>
-            <Link className="button butter-button" href="/shop">SHOP THE SALE <ArrowUpRight size={21} /></Link>
-            <span>One piece only.<br />Once it’s gone, it’s gone.</span>
-          </div>
-        </div>
-        <div className={styles.saleStamp} aria-label="50 percent off sale">
-          <strong>50%</strong><span>OFF</span><small>ONE-OFF<br />FINDS</small>
-        </div>
-        <div className={styles.heroBottom}><span>WEAR WHAT OTHERS WON’T FIND.</span><Link href="/new-drop">DISCOVER THE EDIT <ArrowRight size={15} /></Link><span>EST. FOR THE INDIVIDUAL</span></div>
-      </section>
+      <HeroSlider />
       <div className={styles.ribbon} aria-label="Pre-loved pieces, one-off finds, new possibilities">
         <span>GOOD CLOTHES. SECOND CHANCES.</span><Asterisk aria-hidden="true" /><span>STYLE IS PERSONAL.</span><Asterisk aria-hidden="true" /><span>KEEP THE GOOD GOING.</span><Asterisk aria-hidden="true" />
       </div>
@@ -47,18 +29,18 @@ export function Home({ products, collections, preview, newsletter }: {
         {preview && <p className={styles.previewNote}><span>PREVIEW EDIT</span> Sample pieces & illustrative photography. Live inventory coming soon.</p>}
         {available.length > 0 ? <div className="product-grid">{available.slice(0, 4).map((p) => <ProductCard key={p.id} product={p} />)}</div> : <div className="empty-state"><h3>The next chapter is on its way.</h3><p>Check back for the next edit.</p><Link className="text-link" href="/archive">EXPLORE THE ARCHIVE <ArrowUpRight size={18} /></Link></div>}
       </section>
-      {edits.length > 0 && <section className={`section ${styles.edits}`}>
-        <div className="section-heading">
-          <div><p className="eyebrow">YOUR STYLE. YOUR RULES.</p><h2>Find your <em className={styles.serif}>kind.</em></h2></div>
-          <Link className="text-link" href="/collections">ALL COLLECTIONS <ArrowUpRight size={18} /></Link>
-        </div>
-        <div className={styles.editGrid}>
-          {edits.map((c, i) => <Link className={styles.editCard} href={`/collections/${c.handle}`} key={c.id}>
-            <div className={styles.editImage}><Image src={c.image || "/images/campaign-v2.webp"} alt={`${c.title} collection preview`} fill sizes="(max-width:700px) 80vw, 31vw" /><span className={styles.editNumber}>THE EDIT / 0{i + 1}</span></div>
-            <div className={styles.editCaption}><div><h3>{c.title}</h3><p>{c.description}</p></div><ArrowUpRight size={25} /></div>
-          </Link>)}
-        </div>
-      </section>}
+      <section className={`section ${styles.campaignFeatureSection}`} aria-label="The re-wear edit">
+        <Link className={styles.campaignFeature} href="/shop?availability=available">
+          <Image src="/images/thrift-karo-courtyard-campaign.png" alt="Two friends styled in a curated pre-loved fashion edit beside a clothes rail" fill sizes="(max-width: 760px) 100vw, 92vw" />
+          <div className={styles.featureShade} />
+          <div className={styles.featureCopy}>
+            <p>THE RE-WEAR EDIT</p>
+            <h2>Fashion with<br />a <em>past.</em></h2>
+            <span>One-off finds, chosen for their next chapter.</span>
+            <strong>SHOP THE EDIT <ArrowUpRight size={18} /></strong>
+          </div>
+        </Link>
+      </section>
       <section className={styles.manifesto}>
         <div className={styles.manifestoCopy}>
           <p className="eyebrow">FOR THE ONES WHO FIND THEIR OWN WAY</p>

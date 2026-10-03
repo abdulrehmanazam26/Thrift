@@ -40,7 +40,7 @@ export type Collection = {
 export type CartInput = { productId: string; quantity: number };
 export type CartLine = CartInput & { product: Product };
 export interface CommerceProvider {
-  mode: "local" | "shopify";
+  mode: "local" | "shopify" | "custom";
   getProducts(): Promise<Product[]>;
   getProductByHandle(handle: string): Promise<Product | undefined>;
   getCollections(): Promise<Collection[]>;

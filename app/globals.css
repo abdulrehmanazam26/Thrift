@@ -8,6 +8,10 @@
   --font: "Manrope Variable", Arial, Helvetica, sans-serif;
   color-scheme: light;
 }
+body:has([data-admin-page]) .announcement,
+body:has([data-admin-page]) > .header,
+body:has([data-admin-page]) .footer,
+body:has([data-admin-page]) .skip-link { display: none; }
 * {
   box-sizing: border-box;
 }

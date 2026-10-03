@@ -1,0 +1,13 @@
+# Custom store setup
+
+The storefront no longer calls Shopify. Product catalog, one-piece stock, COD orders, admin login attempts and uploaded product photos use a **private Postgres database**. The Vercel filesystem is not persistent, so a database is required before any order can be accepted.
+
+1. Create or select a database dedicated to this store. A Supabase Postgres project is supported. Use the transaction-pooler connection string for Vercel serverless functions. Do not put this value in any `NEXT_PUBLIC_` variable or commit it.
+2. Run `setup.sql` once in the database SQL editor. It creates tables in `store_private`, enables RLS, and revokes `anon`/`authenticated` access. The database connection used by the app must own or have access to this private schema. Checkout starts **paused**.
+3. Run `seed.sql` once to import the 11 previously listed pieces and their existing local images. The unfinished test T-shirt is excluded. Recheck size, condition, photos and description before publishing. This seed is idempotent by product handle.
+4. Generate admin credentials with `node scripts/hash-admin-password.mjs`. Keep the one-time `ADMIN_PASSWORD` private in a password manager; **do not** add that plaintext value to Vercel or `.env.local`. Set only `ADMIN_USERNAME`, `ADMIN_PASSWORD_HASH`, `ADMIN_SESSION_SECRET`, `DATABASE_URL`, and `NEXT_PUBLIC_SITE_URL` in Vercel Project → Settings → Environment Variables. Use `NEXT_PUBLIC_SITE_URL=https://preloved-mu.vercel.app` for the production deployment. Set the same values locally in `.env.local` (with local site URL) to test.
+5. Redeploy. Visit `/admin`, sign in, review the product data and approve the final return/privacy/terms copy. Only then use Settings → **Open checkout**. Make a Karachi test COD order and verify that the order appears in admin, delivery is Rs 250, no extra tax is added, and one-piece stock reaches zero. Cancel the test order in admin to restore its stock.
+
+Images uploaded through admin are stored in the private database, up to 3 MB each. For a much larger catalog, migrate images to object storage. No online payments, courier label purchase, automated SMS, or customer account are included. The admin panel can list the latest 100 orders; historical orders remain in the database. Back up the database regularly.
+
+Security: password uses salted scrypt, admin sessions use signed HttpOnly cookies, admin mutations require a same-origin request, and sign-in attempts are rate limited. Order prices, Rs 250 delivery, and stock are calculated server-side inside a database transaction. The storefront refuses orders when the database is unconfigured or checkout is paused. Rotate secrets if exposed, and do not paste them into chat.

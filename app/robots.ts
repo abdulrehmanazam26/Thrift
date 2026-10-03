@@ -7,9 +7,9 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       ...(commerce.mode === "local"
         ? { disallow: "/" }
-        : { allow: "/", disallow: ["/api/", "/account", "/wishlist"] }),
+        : { allow: "/", disallow: ["/api/", "/account", "/wishlist", "/checkout", "/admin", "/order/"] }),
     },
-    ...(commerce.mode === "shopify"
+    ...(commerce.mode === "custom"
       ? { sitemap: settings.siteUrl + "/sitemap.xml" }
       : {}),
   };

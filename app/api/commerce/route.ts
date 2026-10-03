@@ -1,9 +1,8 @@
-import { getProducts } from "@/lib/commerce/products";
 import { commerce } from "@/lib/commerce/provider";
 export async function GET() {
   try {
     return Response.json(
-      { products: await getProducts(), mode: commerce.mode },
+      { products: await commerce.getProducts(), mode: commerce.mode },
       { headers: { "Cache-Control": "no-store" } },
     );
   } catch {

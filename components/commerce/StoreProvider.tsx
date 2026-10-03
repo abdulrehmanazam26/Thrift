@@ -11,7 +11,7 @@ import { addToCart } from "@/lib/commerce/cart";
 import { track } from "@/lib/analytics";
 type Store = {
   products: Product[];
-  mode: "local" | "shopify";
+  mode: "local" | "shopify" | "custom";
   lines: CartInput[];
   wishlist: string[];
   cartOpen: boolean;
@@ -31,7 +31,7 @@ export function StoreProvider({
 }: {
   children: React.ReactNode;
   products: Product[];
-  mode: "local" | "shopify";
+  mode: "local" | "shopify" | "custom";
 }) {
   const [products, setProducts] = useState(initialProducts),
     [lines, setLines] = useState<CartInput[]>([]),
