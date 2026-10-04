@@ -94,6 +94,16 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .footer-urdu { color: var(--red); font-family: "Noto Nastaliq Urdu", "Noto Naskh Arabic", "Segoe UI", serif; font-size: .62em; letter-spacing: 0; }
 .footer-bottom { border-top-color: #ffffff40; color: #e8e0d1; }
 .mobile-nav a:hover { color: var(--cobalt); }
+.mobile-nav-group { border-bottom: 1px solid var(--line); }
+.mobile-nav-group summary { display: flex; align-items: center; gap: 20px; padding: 11px 0; cursor: pointer; font-size: clamp(22px, 6vw, 38px); font-weight: 650; letter-spacing: -.04em; list-style: none; }
+.mobile-nav-group summary::-webkit-details-marker { display: none; }
+.mobile-nav-group summary .small { color: var(--muted); font-size: 11px; letter-spacing: 0; }
+.mobile-nav-group summary svg { width: 23px; height: 23px; margin-left: auto; transition: transform .18s ease; }
+.mobile-nav-group[open] summary { color: var(--cobalt); }
+.mobile-nav-group[open] summary svg { transform: rotate(180deg); }
+.mobile-nav-group > div { display: grid; gap: 2px; padding: 3px 0 13px 31px; }
+.mobile-nav-group > div a { min-height: 38px; padding: 8px 0; border: 0; color: var(--muted); font-size: 12px; font-weight: 750; letter-spacing: .02em; }
+.mobile-nav-group > div a:first-child { color: var(--red); }
 .dialog-heading { border-color: var(--line); }
 .dialog-heading h2 { color: var(--cobalt); }
 @media (min-width: 701px) and (max-width: 1250px) {

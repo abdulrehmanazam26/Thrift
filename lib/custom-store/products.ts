@@ -1,90 +1,15 @@
 import "server-only";
+import type { RowDataPacket } from "mysql2";
 import type { Collection, Condition, Product, ProductImage } from "@/lib/commerce/types";
-import { db } from "./db";
+import { mysqlDb } from "./mysql";
 
-type ProductRow = {
-  id: string;
-  handle: string;
-  title: string;
-  brand: string;
-  description: string;
-  category: string;
-  gender: string;
-  style: string[];
-  condition: Condition;
-  condition_notes: string;
-  size_label: string;
-  measurements: Record<string, number>;
-  color: string;
-  material: string | null;
-  price: number;
-  compare_at_price: number | null;
-  stock: number;
-  images: ProductImage[];
-  defects: string[];
-  tags: string[];
-  collections: string[];
-  era: string | null;
-  is_active: boolean;
-  created_at: Date | string;
-};
-
-export function mapProduct(row: ProductRow): Product {
-  return {
-    id: row.id,
-    handle: row.handle,
-    title: row.title,
-    brand: row.brand,
-    description: row.description,
-    category: row.category,
-    gender: row.gender,
-    style: row.style,
-    condition: row.condition,
-    conditionNotes: row.condition_notes,
-    sizeLabel: row.size_label,
-    measurements: row.measurements,
-    color: row.color,
-    material: row.material || undefined,
-    price: row.price,
-    compareAtPrice: row.compare_at_price || undefined,
-    stock: row.stock,
-    images: row.images,
-    defects: row.defects,
-    tags: row.tags,
-    collection: row.collections,
-    era: row.era || undefined,
-    currency: "PKR",
-    createdAt: new Date(row.created_at).toISOString(),
-  };
-}
-
-export async function listProducts(includeInactive = false) {
-  const sql = db();
-  const rows = includeInactive
-    ? await sql`select * from store_private.products order by created_at desc`
-    : await sql`select * from store_private.products where is_active = true order by created_at desc`;
-  return rows.map((row) => mapProduct(row as ProductRow));
-}
-
-export async function findProductByHandle(handle: string) {
-  const sql = db();
-  const rows = await sql`select * from store_private.products where handle = ${handle} and is_active = true limit 1`;
-  return rows[0] ? mapProduct(rows[0] as ProductRow) : undefined;
-}
-
-export async function listCollections(): Promise<Collection[]> {
-  const products = await listProducts();
-  const handles = [...new Set(products.flatMap((product) => product.collection))];
-  return handles.map((handle) => {
-    const members = products.filter((product) => product.collection.includes(handle));
-    return {
-      id: handle,
-      handle,
-      title: handle.split("-").map((word) => word[0]?.toUpperCase() + word.slice(1)).join(" "),
-      description: `Curated pre-loved pieces from our ${handle.replaceAll("-", " ")} edit.`,
-      image: members[0]?.images[0]?.src,
-      productIds: members.map((product) => product.id),
-      isDrop: handle === "new-drop",
-    };
-  });
-}
+type ProductRow = RowDataPacket & { id: string; handle: string; title: string; brand: string; description: string; category: string | null; gender: string; condition_grade: string; condition_notes: string; size_label: string; color: string; material: string | null; price: number; compare_at_price: number | null; stock: number; style_tags: string | string[]; defect_notes: string | string[]; collection_tags: string | string[]; era: string | null; created_at: Date | string };
+const productSelect = `SELECT p.id, p.slug AS handle, p.product_name AS title, p.brand, p.full_description AS description, c.category_name AS category, p.gender, p.condition_grade, p.condition_notes, p.size_label, p.color, p.material, COALESCE(p.sale_price, p.price) AS price, p.price AS compare_at_price, p.stock, p.style_tags, p.defect_notes, p.collection_tags, p.era, p.created_at FROM products p LEFT JOIN categories c ON c.id = p.category_id`;
+function jsonArray(value: unknown) { if (Array.isArray(value)) return value.map(String); if (typeof value !== "string") return []; try { const parsed = JSON.parse(value); return Array.isArray(parsed) ? parsed.map(String) : []; } catch { return []; } }
+export function conditionFromDatabase(value: string): Condition { const normalized = value.toLowerCase(); if (normalized === "premium") return "Premium"; if (normalized === "like new") return "Like new"; if (normalized === "excellent") return "Excellent"; if (normalized === "very good") return "Very good"; return "Good"; }
+export function conditionForDatabase(value: Condition) { return value === "Like new" ? "Like New" : value === "Very good" ? "Very Good" : value; }
+async function imagesFor(productId: string, title: string): Promise<ProductImage[]> { const [rows] = await mysqlDb().execute<(RowDataPacket & { image_path: string; alt_text: string | null })[]>("SELECT image_path, alt_text FROM product_images WHERE product_id = ? ORDER BY is_primary DESC, sort_order ASC", [productId]); return rows.map((row, index) => ({ src: row.image_path, alt: row.alt_text || title, label: `Photo ${index + 1}` })); }
+async function mapProduct(row: ProductRow): Promise<Product> { return { id: row.id, handle: row.handle, title: row.title, brand: row.brand, description: row.description, category: row.category || "Clothing", gender: row.gender, style: jsonArray(row.style_tags), condition: conditionFromDatabase(row.condition_grade), conditionNotes: row.condition_notes, sizeLabel: row.size_label, measurements: {}, color: row.color, material: row.material || undefined, price: Number(row.price), compareAtPrice: row.compare_at_price ? Number(row.compare_at_price) : undefined, stock: Number(row.stock), images: await imagesFor(row.id, row.title), defects: jsonArray(row.defect_notes), tags: [], collection: jsonArray(row.collection_tags), era: row.era || undefined, currency: "PKR", createdAt: new Date(row.created_at).toISOString() }; }
+export async function listProducts(includeInactive = false) { const [rows] = await mysqlDb().query<ProductRow[]>(`${productSelect} WHERE p.status ${includeInactive ? "<> 'deleted'" : "IN ('active', 'sold')"} ORDER BY p.created_at DESC`); return Promise.all(rows.map(mapProduct)); }
+export async function findProductByHandle(handle: string) { const [rows] = await mysqlDb().execute<ProductRow[]>(`${productSelect} WHERE p.slug = ? AND p.status IN ('active', 'sold') LIMIT 1`, [handle]); return rows[0] ? mapProduct(rows[0]) : undefined; }
+export async function listCollections(): Promise<Collection[]> { const products = await listProducts(); const handles = [...new Set(products.flatMap((product) => product.collection))]; return handles.map((handle) => { const members = products.filter((product) => product.collection.includes(handle)); return { id: handle, handle, title: handle.split("-").map((word) => word[0]?.toUpperCase() + word.slice(1)).join(" "), description: `Curated pre-loved pieces from our ${handle.replaceAll("-", " ")} edit.`, image: members[0]?.images[0]?.src, productIds: members.map((product) => product.id), isDrop: handle === "new-drop" }; }); }

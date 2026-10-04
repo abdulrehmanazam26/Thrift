@@ -1,29 +1,8 @@
+import type { RowDataPacket } from "mysql2";
 import { z } from "zod";
 import { isAdmin } from "@/lib/admin/auth";
-import { db } from "@/lib/custom-store/db";
+import { mysqlDb } from "@/lib/custom-store/mysql";
 import { isStoreOrigin } from "@/lib/request-origin";
 const input = z.object({ id: z.string().uuid(), status: z.enum(["new", "confirmed", "packed", "out_for_delivery", "delivered", "cancelled"]) });
-export async function PATCH(request: Request) {
-  if (!isStoreOrigin(request)) return Response.json({ error: "Invalid request origin." }, { status: 403 });
-  if (!(await isAdmin())) return Response.json({ error: "Unauthorized." }, { status: 401 });
-  const parsed = input.safeParse(await request.json().catch(() => null));
-  if (!parsed.success) return Response.json({ error: "Invalid order update." }, { status: 400 });
-  const sql = db();
-  try {
-    await sql.begin(async (tx) => {
-      const rows = await tx`select status from store_private.orders where id = ${parsed.data.id} for update`;
-      if (!rows[0]) throw new Error("Order not found.");
-      const old = rows[0].status as string;
-      const next = parsed.data.status;
-      if (old === "cancelled" && next !== "cancelled") throw new Error("Cancelled orders cannot be reopened. Create a new order instead.");
-      if (old !== "cancelled" && next === "cancelled") {
-        const items = await tx`select product_id, quantity from store_private.order_items where order_id = ${parsed.data.id}`;
-        for (const item of items) await tx`update store_private.products set stock = stock + ${item.quantity}, updated_at = now() where id = ${item.product_id}`;
-      }
-      await tx`update store_private.orders set status = ${next}, updated_at = now() where id = ${parsed.data.id}`;
-    });
-    return Response.json({ ok: true });
-  } catch (error) {
-    return Response.json({ error: error instanceof Error ? error.message : "Could not update order." }, { status: 400 });
-  }
-}
+const fromUiStatus = (value: string) => ({ new: "pending", confirmed: "confirmed", packed: "processing", out_for_delivery: "shipped", delivered: "delivered", cancelled: "cancelled" }[value] || value);
+export async function PATCH(request: Request) { if (!isStoreOrigin(request)) return Response.json({ error: "Invalid request origin." }, { status: 403 }); if (!(await isAdmin())) return Response.json({ error: "Unauthorized." }, { status: 401 }); const parsed = input.safeParse(await request.json().catch(() => null)); if (!parsed.success) return Response.json({ error: "Invalid order update." }, { status: 400 }); const connection = await mysqlDb().getConnection(); try { await connection.beginTransaction(); const [rows] = await connection.execute<RowDataPacket[]>("SELECT order_status FROM orders WHERE id=? FOR UPDATE", [parsed.data.id]); if (!rows[0]) throw new Error("Order not found."); const oldStatus = String(rows[0].order_status); const nextStatus = fromUiStatus(parsed.data.status); if (oldStatus === "cancelled" && nextStatus !== "cancelled") throw new Error("Cancelled orders cannot be reopened."); if (oldStatus !== "cancelled" && nextStatus === "cancelled") { const [items] = await connection.execute<RowDataPacket[]>("SELECT product_id FROM order_items WHERE order_id=?", [parsed.data.id]); for (const item of items) if (item.product_id) await connection.execute("UPDATE products SET stock=1,status='active' WHERE id=?", [item.product_id]); } await connection.execute("UPDATE orders SET order_status=? WHERE id=?", [nextStatus, parsed.data.id]); await connection.execute("INSERT INTO order_status_history (order_id,old_status,new_status,note) VALUES (?,?,?,?)", [parsed.data.id, oldStatus, nextStatus, "Updated from admin"]); await connection.commit(); return Response.json({ ok: true }); } catch (error) { await connection.rollback(); return Response.json({ error: error instanceof Error ? error.message : "Could not update order." }, { status: 400 }); } finally { connection.release(); } }

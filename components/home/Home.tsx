@@ -29,30 +29,17 @@ export function Home({ products, preview, newsletter }: {
         {preview && <p className={styles.previewNote}><span>PREVIEW EDIT</span> Sample pieces & illustrative photography. Live inventory coming soon.</p>}
         {available.length > 0 ? <div className="product-grid">{available.slice(0, 4).map((p) => <ProductCard key={p.id} product={p} />)}</div> : <div className="empty-state"><h3>The next chapter is on its way.</h3><p>Check back for the next edit.</p><Link className="text-link" href="/archive">EXPLORE THE ARCHIVE <ArrowUpRight size={18} /></Link></div>}
       </section>
-      <section className={`section ${styles.campaignFeatureSection}`} aria-label="The re-wear edit">
+      <section className={`section ${styles.campaignFeatureSection}`} aria-label="Thrift Karo campaign">
         <Link className={styles.campaignFeature} href="/shop?availability=available">
           <Image src="/images/thrift-karo-courtyard-campaign.png" alt="Two friends styled in a curated pre-loved fashion edit beside a clothes rail" fill sizes="(max-width: 760px) 100vw, 92vw" />
           <div className={styles.featureShade} />
           <div className={styles.featureCopy}>
-            <p>THE RE-WEAR EDIT</p>
-            <h2>Fashion with<br />a <em>past.</em></h2>
-            <span>One-off finds, chosen for their next chapter.</span>
-            <strong>SHOP THE EDIT <ArrowUpRight size={18} /></strong>
+            <p>THE THRIFT KARO ATTITUDE</p>
+            <h2>Purana hai?<br /><em>So what!</em></h2>
+            <span>Good style doesn&apos;t need to be brand new.</span>
+            <strong>FIND YOUR FIT <ArrowUpRight size={18} /></strong>
           </div>
         </Link>
-      </section>
-      <section className={styles.manifesto}>
-        <div className={styles.manifestoCopy}>
-          <p className="eyebrow">FOR THE ONES WHO FIND THEIR OWN WAY</p>
-          <h2>NOT MADE<br />FOR EVERYONE.<br /><em>Found by you.</em></h2>
-          <p>That perfect fade. That unexpected fit. The piece you didn’t know you were looking for. This is what finding your own style feels like.</p>
-          <Link className="button butter-button" href="/shop?availability=available">FIND YOUR ONE <ArrowUpRight size={21} /></Link>
-        </div>
-        <div className={styles.manifestoArt}>
-          <div className={styles.polaroid}><div><Image src="/images/streetwear.jpg" alt="Editorial streetwear styling inspiration, not a product listing" fill sizes="(max-width:700px) 74vw, 32vw" /></div><span>A LITTLE CHARACTER GOES A LONG WAY. <Asterisk size={21} /></span></div>
-          <span className={styles.handwritten}>already loved.<br />not done yet.</span>
-          <Asterisk className={styles.artStar} size={100} strokeWidth={1} aria-hidden="true" />
-        </div>
       </section>
       <section className={`section ${styles.details}`}>
         <div className={styles.detailsIntro}><p className="eyebrow">LOOK GOOD. KNOW MORE.</p><h2>A good find.<br /><em className={styles.serif}>No guesswork.</em></h2><Link className="text-link" href="/about">THE THRIFT VAULT WAY <ArrowUpRight size={17} /></Link></div>

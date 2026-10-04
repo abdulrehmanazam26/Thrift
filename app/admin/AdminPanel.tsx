@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import {
   BarChart3,
+  ChevronDown,
   ClipboardList,
   LayoutDashboard,
   Package,
@@ -31,11 +32,12 @@ type Product = {
   compare_at_price: number | null;
   stock: number;
   images: Array<{ src: string }>;
+  status: "active" | "inactive" | "sold";
   is_active: boolean;
 };
 type Order = {
   id: string;
-  order_number: number;
+  order_number: string;
   customer_name: string;
   phone: string;
   email: string | null;
@@ -85,7 +87,7 @@ const emptyProduct: ProductForm = {
   condition: "Good",
   conditionNotes: "",
   sizeLabel: "Ask for size",
-  color: "See photos",
+  color: "",
   price: 0,
   compareAtPrice: null,
   stock: 1,
@@ -149,6 +151,22 @@ const categories = [
 ];
 const rupees = (amount: number) =>
   `Rs ${Number(amount || 0).toLocaleString("en-PK")}`;
+
+type SelectOption = { value: string; label: string };
+function AdminSelect({ value, options, onChange, ariaLabel, disabled = false, className = "" }: { value: string; options: SelectOption[]; onChange: (value: string) => void; ariaLabel: string; disabled?: boolean; className?: string }) {
+  const [open, setOpen] = useState(false);
+  const selected = options.find((option) => option.value === value)?.label || value;
+  return <div className={`${styles.customSelect} ${className}`}>
+    <button type="button" aria-label={ariaLabel} aria-haspopup="listbox" aria-expanded={open} disabled={disabled} onClick={() => setOpen((current) => !current)}>
+      <span>{selected}</span><ChevronDown size={16} />
+    </button>
+    {open && <div className={styles.selectMenu} role="listbox" aria-label={ariaLabel}>
+      {options.map((option) => <button type="button" role="option" aria-selected={option.value === value} className={option.value === value ? styles.selectedOption : ""} key={option.value} onClick={() => { onChange(option.value); setOpen(false); }}>
+        {option.label}
+      </button>)}
+    </div>}
+  </div>;
+}
 
 type AdminTab =
   | "overview"
@@ -307,6 +325,44 @@ export function AdminPanel({
     });
     setTab("products");
   }
+  async function toggleProductVisibility(product: Product) {
+    if (demoMode) return;
+    const publish = product.status !== "active";
+    setBusy(true);
+    setNotice("");
+    try {
+      const response = await fetch("/api/admin/products", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: product.id,
+          handle: product.handle,
+          title: product.title,
+          brand: product.brand,
+          description: product.description,
+          category: product.category,
+          gender: product.gender,
+          condition: product.condition,
+          conditionNotes: product.condition_notes,
+          sizeLabel: product.size_label,
+          color: product.color,
+          price: product.price,
+          compareAtPrice: product.compare_at_price,
+          stock: publish ? Math.max(product.stock, 1) : product.stock,
+          imageUrls: product.images.map((image) => image.src),
+          isActive: publish,
+        }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "Could not update product.");
+      await reload();
+      setNotice(publish ? "Product is now live in the store." : "Product moved to drafts.");
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : "Could not update product.");
+    } finally {
+      setBusy(false);
+    }
+  }
   const visibleOrders = (data?.orders || []).filter((order) => {
     if (orderFilter !== "all" && order.status !== orderFilter) return false;
     const query = orderQuery.trim().toLowerCase();
@@ -319,11 +375,7 @@ export function AdminPanel({
   });
   const visibleProducts = (data?.products || []).filter((product) => {
     const query = productQuery.trim().toLowerCase();
-    const status = !product.is_active
-      ? "draft"
-      : product.stock === 0
-        ? "sold"
-        : "live";
+    const status = product.status === "inactive" ? "draft" : product.status === "sold" || product.stock === 0 ? "sold" : "live";
     return (
       (productFilter === "all" || productFilter === status) &&
       (!query ||
@@ -334,7 +386,7 @@ export function AdminPanel({
     );
   });
   const productStatus = (product: Product) =>
-    !product.is_active ? "Draft" : product.stock === 0 ? "Sold out" : "Live";
+    product.status === "inactive" ? "Draft" : product.status === "sold" || product.stock === 0 ? "Sold out" : "Live";
   function exportOrders() {
     const escapeCell = (value: unknown) => {
       const text = String(value ?? "").replace(/^[\s]*[=+\-@]/, "'$&");
@@ -587,18 +639,13 @@ export function AdminPanel({
                     value={orderQuery}
                     onChange={(event) => setOrderQuery(event.target.value)}
                   />
-                  <select
-                    aria-label="Filter order status"
+                  <AdminSelect
+                    ariaLabel="Filter order status"
                     value={orderFilter}
-                    onChange={(event) => setOrderFilter(event.target.value)}
-                  >
-                    <option value="all">All statuses</option>
-                    {statuses.map((status) => (
-                      <option key={status} value={status}>
-                        {status.replaceAll("_", " ")}
-                      </option>
-                    ))}
-                  </select>
+                    onChange={setOrderFilter}
+                    options={[{ value: "all", label: "All statuses" }, ...statuses.map((status) => ({ value: status, label: status.replaceAll("_", " ") }))]}
+                    className={styles.orderFilter}
+                  />
                   <button
                     type="button"
                     onClick={exportOrders}
@@ -622,20 +669,14 @@ export function AdminPanel({
                               {new Date(o.created_at).toLocaleString("en-PK")}
                             </span>
                           </div>
-                          <select
-                            aria-label={`Status for order ${o.order_number}`}
+                          <AdminSelect
+                            ariaLabel={`Status for order ${o.order_number}`}
                             value={o.status}
                             disabled={busy}
-                            onChange={(e) =>
-                              void updateOrder(o.id, e.target.value)
-                            }
-                          >
-                            {statuses.map((s) => (
-                              <option key={s} value={s}>
-                                {s.replaceAll("_", " ")}
-                              </option>
-                            ))}
-                          </select>
+                            onChange={(status) => void updateOrder(o.id, status)}
+                            options={statuses.map((status) => ({ value: status, label: status.replaceAll("_", " ") }))}
+                            className={styles.orderStatus}
+                          />
                         </div>
                         <div className={styles.orderBody}>
                           <div>
@@ -742,19 +783,10 @@ export function AdminPanel({
                           }
                         />
                       </label>
-                      <label>
-                        Category
-                        <select
-                          value={editor.category}
-                          onChange={(e) =>
-                            setEditor({ ...editor, category: e.target.value })
-                          }
-                        >
-                          {categories.map((category) => (
-                            <option key={category}>{category}</option>
-                          ))}
-                        </select>
-                      </label>
+                      <div className={styles.field}>
+                        <span>Category</span>
+                        <AdminSelect ariaLabel="Product category" value={editor.category} onChange={(category) => setEditor({ ...editor, category })} options={categories.map((category) => ({ value: category, label: category }))} />
+                      </div>
                       <label>
                         Sale price · Rs
                         <input
@@ -866,27 +898,19 @@ export function AdminPanel({
                         )}
                       </fieldset>
                       <label>
-                        Color
+                        Color <small>(optional)</small>
                         <input
                           value={editor.color}
+                          placeholder="e.g. Red, black, beige"
                           onChange={(e) =>
                             setEditor({ ...editor, color: e.target.value })
                           }
                         />
                       </label>
-                      <label>
-                        Gender
-                        <select
-                          value={editor.gender}
-                          onChange={(e) =>
-                            setEditor({ ...editor, gender: e.target.value })
-                          }
-                        >
-                          {["Women", "Men", "Unisex"].map((x) => (
-                            <option key={x}>{x}</option>
-                          ))}
-                        </select>
-                      </label>
+                      <div className={styles.field}>
+                        <span>Gender</span>
+                        <AdminSelect ariaLabel="Product gender" value={editor.gender} onChange={(gender) => setEditor({ ...editor, gender })} options={["Women", "Men", "Unisex"].map((gender) => ({ value: gender, label: gender }))} />
+                      </div>
                       <div className={`${styles.wide} ${styles.photosField}`}>
                         <p>PRODUCT PHOTOS</p>
                         <PhotoUploader
@@ -1033,7 +1057,7 @@ export function AdminPanel({
                             setSelectedProductIds(event.target.checked ? visibleProducts.map((product) => product.id) : [])
                           }
                         />
-                        <span>PRODUCT</span><span>DETAILS</span><span>PRICE</span><span>STOCK</span><span>STATUS</span><span />
+                        <span>PRODUCT</span><span>DETAILS</span><span>PRICE</span><span>STOCK</span><span>STATUS</span><span>ACTIONS</span>
                       </div>
                       {visibleProducts.length === 0 ? (
                         <div className={styles.empty}>No products match these filters.</div>
@@ -1054,7 +1078,12 @@ export function AdminPanel({
                           <span className={styles.productPrice}>{rupees(p.price)}{p.compare_at_price ? <small>{rupees(p.compare_at_price)}</small> : null}</span>
                           <span className={styles.productStock}>{p.stock > 0 ? `${p.stock} piece${p.stock === 1 ? "" : "s"}` : "0 pieces"}</span>
                           <span className={`${styles.statusPill} ${status === "Live" ? styles.livePill : status === "Sold out" ? styles.soldPill : styles.draftPill}`}>{status}</span>
-                          <button className={styles.editButton} onClick={() => editProduct(p)}>EDIT</button>
+                          <div className={styles.productActions}>
+                            <button className={styles.visibilityButton} type="button" disabled={busy} onClick={() => void toggleProductVisibility(p)}>
+                              {p.status === "active" ? "UNPUBLISH" : "PUBLISH"}
+                            </button>
+                            <button className={styles.editButton} type="button" onClick={() => editProduct(p)}>EDIT</button>
+                          </div>
                         </article>;
                       })}
                     </div>

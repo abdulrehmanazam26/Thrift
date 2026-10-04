@@ -10,23 +10,23 @@ const slides = [
   {
     image: "/images/thrift-karo-hero-courtyard.png",
     alt: "Woman in a cream knit and vintage denim in a warm courtyard",
-    eyebrow: "THE RE-WEAR EDIT / 01",
-    title: <>Find your<br /><em>next story.</em></>,
-    copy: "One-off pre-loved pieces, picked for the way they feel now.",
+    eyebrow: "THE MAIN CHARACTER EDIT / 01",
+    title: <>Before it becomes<br />someone else&apos;s <em>main character fit.</em></>,
+    copy: <>AGAIN, THRIFT <span lang="ur" dir="rtl">کرو</span></>,
   },
   {
     image: "/images/thrift-karo-hero-atelier.png",
     alt: "Two friends in a refined vintage clothing atelier",
-    eyebrow: "THE CURATED RAIL / 02",
-    title: <>Good clothes.<br /><em>Again.</em></>,
-    copy: "Character, texture and a better next chapter for every piece.",
+    eyebrow: "THE RE-WEAR EDIT / 02",
+    title: <><em>Purana hai,</em><br />par vibe nayi hai.</>,
+    copy: "The fit has a past. The energy is completely new.",
   },
   {
     image: "/images/thrift-karo-courtyard-campaign.png",
     alt: "Friends styled in a curated pre-loved fashion edit beside a clothes rail",
-    eyebrow: "THE VAULT DROP / 03",
-    title: <>Wear the<br /><em>unexpected.</em></>,
-    copy: "Thoughtfully found. Ready to become entirely your own.",
+    eyebrow: "THE PRICE CHECK / 03",
+    title: <>International fits.<br /><em>Desi prices.</em></>,
+    copy: "Curated one-off pieces without the impossible price tag.",
   },
 ];
 

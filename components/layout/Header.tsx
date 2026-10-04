@@ -135,22 +135,34 @@ export function Header() {
         variant="menu"
       >
         <nav className="mobile-nav" aria-label="Mobile navigation">
+          <Link href="/" onClick={() => setMenu(false)}>
+            <span className="small">01</span>HOME<ArrowUpRight />
+          </Link>
+          {categoryMenus.map((section, index) => (
+            <details className="mobile-nav-group" key={section.label}>
+              <summary>
+                <span className="small">{String(index + 2).padStart(2, "0")}</span>
+                {section.label}<ChevronDown />
+              </summary>
+              <div>
+                <Link href={section.href} onClick={() => setMenu(false)}>
+                  VIEW ALL {section.label}<ArrowUpRight />
+                </Link>
+                {section.items.map(([label, url]) => (
+                  <Link href={url} key={label} onClick={() => setMenu(false)}>
+                    {label}<ArrowUpRight />
+                  </Link>
+                ))}
+              </div>
+            </details>
+          ))}
           {[
-            ["HOME", "/"],
-            ...categoryMenus.flatMap((menu) => [
-              [menu.label, menu.href],
-              ...menu.items.map(([label, url]) => [`↳ ${label}`, url]),
-            ]),
             ["VINTAGE", "/shop?style=Vintage"],
             ["ABOUT", "/about"],
-            ["THE ARCHIVE", "/archive"],
-            ["SAVED PIECES", "/wishlist"],
-            ["ACCOUNT", "/account"],
-          ].map(([label, url], i) => (
+          ].map(([label, url], index) => (
             <Link key={label} href={url} onClick={() => setMenu(false)}>
-              <span className="small">{String(i + 1).padStart(2, "0")}</span>
-              {label}
-              <ArrowUpRight />
+              <span className="small">{String(index + 4).padStart(2, "0")}</span>
+              {label}<ArrowUpRight />
             </Link>
           ))}
         </nav>
